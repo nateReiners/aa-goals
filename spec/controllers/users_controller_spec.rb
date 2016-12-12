@@ -29,12 +29,20 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:user) {User.new(username: "WalterWhite", password: "heisenberg") }
+    let(:user) {User.create!(username: "WalterWhite", password: "heisenberg") }
 
-    it "shows the user's profile page" do
-      get :show, user
-      expect(response).to render_template("show")
-      expect(response).to have_http_status(200)
+    context "when logged in" do
+
+      before do
+        allow(controller).to receive(:current_user) { user }
+      end
+
+      it "shows the user's profile page" do
+        get :show, id: user.id
+        expect(response).to render_template("show")
+        expect(response).to have_http_status(200)
+      end
+
     end
   end
 
