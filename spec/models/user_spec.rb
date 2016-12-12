@@ -1,7 +1,18 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  username        :string           not null
+#  session_token   :string           not null
+#  password_digest :string           not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe User do
     subject(:user) do
       FactoryGirl.build(:user,
         username: "Boris",
@@ -28,27 +39,25 @@ RSpec.describe User, type: :model do
 
     describe "#is_password?" do
       it "verifies password is correct" do
-        expect.user.is_password?("password").to be true
+        expect(user.is_password?("password")).to be true
       end
 
       it "verifies a password is not correct" do
-        expect.user.is_password?("blahblahblah").to be false
+        expect(user.is_password?("blahblahblah")).to be false
       end
     end
 
-    describe "#reset_session_token!" do
-      it "resets the user's session token" do
+    describe "#restore_session_token!" do
+      it "restores the user's session token" do
         user.valid?
         old_session_token = user.session_token
-        user.reset_session_token!
+        user.restore_session_token!
         expect(old_session_token).to_not eq(user.session_token)
       end
 
       it "returns the new session_token" do
-        expect(user.reset_session_token!).to eq(user.session_token)
+        expect(user.restore_session_token!).to eq(user.session_token)
       end
-
-
     end
 
 
@@ -64,5 +73,4 @@ RSpec.describe User, type: :model do
       end
     end
 
-  end
 end
