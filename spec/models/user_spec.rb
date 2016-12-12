@@ -16,6 +16,14 @@ RSpec.describe User, type: :model do
     it { should have_many(:goals) }
     it { should have_many(:comments) }
 
+    it "creates password digest when password is given" do
+      expect(user.password_digest).to_not be_nil
+    end
+
+    it "creates a session token before validation" do
+      user.valid?
+      expect(user.session_token).to_not be_nil
+    end
 
 
     describe "#is_password?" do
